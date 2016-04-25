@@ -119,11 +119,11 @@ class OBJ(object):
                 continue
 
             if values[0] == 'v':
-                vertices.append(map(float, values[1:4]))
+                vertices.append([*map(float, values[1:4])])
             elif values[0] == 'vn':
-                normals.append(map(float, values[1:4]))
+                normals.append([*map(float, values[1:4])])
             elif values[0] == 'vt':
-                tex_coords.append(map(float, values[1:3]))
+                tex_coords.append([*map(float, values[1:3])])
             elif values[0] == 'mtllib':
                 self.load_material_library(values[1])
             elif values[0] in ('usemtl', 'usemat'):
@@ -159,7 +159,7 @@ class OBJ(object):
                 #points = []
                 for i, v in enumerate(values[1:]):
                     v_index, t_index, n_index = \
-                        (map(int, [j or 0 for j in v.split('/')]) + [0, 0])[:3]
+                        (*map(int, [j or 0 for j in v.split('/')]), 0, 0)[:3]
                     if v_index < 0:
                         v_index += len(vertices) - 1
                     if t_index < 0:
@@ -209,7 +209,7 @@ class OBJ(object):
             for group in mesh.groups:
                 vertices = []
                 normals = []
-                for index in xrange(0, len(group.vertices), 3):
+                for index in range(0, len(group.vertices), 3):
                     tv = self.transforms * euclid.Point3(group.vertices[index],
                                                          group.vertices[index+1],
                                                          group.vertices[index+2]
@@ -255,13 +255,13 @@ class OBJ(object):
 
             try:
                 if values[0] == 'Kd':
-                    material.diffuse = map(float, values[1:])
+                    material.diffuse = [*map(float, values[1:])]
                 elif values[0] == 'Ka':
-                    material.ambient = map(float, values[1:])
+                    material.ambient = [*map(float, values[1:])]
                 elif values[0] == 'Ks':
-                    material.specular = map(float, values[1:])
+                    material.specular = [*map(float, values[1:])]
                 elif values[0] == 'Ke':
-                    material.emissive = map(float, values[1:])
+                    material.emissive = [*map(float, values[1:])]
                 elif values[0] == 'Ns':
                     material.shininess = float(values[1])
                 elif values[0] == 'd':
@@ -321,4 +321,3 @@ if __name__ == "__main__":
         obj.add_to(batch)
 
         pyglet.app.run()
-
